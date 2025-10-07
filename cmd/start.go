@@ -37,9 +37,12 @@ func init() {
 func runStart(cmd *cobra.Command, args []string) error {
 	task := args[0]
 
-	// Check if already in a focus session
+	// If active session exists, pause it
 	if session.Exists() {
-		return fmt.Errorf("❌ Already in a focus session. Run 'focus end' first or 'focus status' to see current session")
+		if err := session.PauseActive(); err != nil {
+			return fmt.Errorf("failed to pause current session: %w", err)
+		}
+		fmt.Println("✓ Paused current session")
 	}
 
 	// Check if in a git repository
@@ -60,11 +63,13 @@ func runStart(cmd *cobra.Command, args []string) error {
 
 	// Create session
 	sess := &session.Session{
+		ID:        session.GenerateID(task),
 		Task:      task,
 		StartTime: time.Now(),
 		TimeBox:   timeBox,
 		Branch:    branch,
 		Drifts:    []session.Drift{},
+		Status:    "active",
 	}
 
 	if err := sess.Save(); err != nil {

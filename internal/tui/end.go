@@ -111,22 +111,18 @@ func (m EndModel) View() string {
 	options := []struct {
 		label string
 		desc  string
-		emoji string
 	}{
 		{
-			label: "Merge to main",
-			desc:  "Goal achieved! Merge branch and complete session",
-			emoji: EmojiSuccess,
+			label: "Complete and merge",
+			desc:  "Merge branch to main and end session",
 		},
 		{
-			label: "Continue tomorrow",
-			desc:  "Save progress, keep branch, resume later",
-			emoji: EmojiPin,
+			label: "Pause session",
+			desc:  "Keep branch and resume later",
 		},
 		{
-			label: "Abandon",
-			desc:  "This was a rabbit hole, delete branch",
-			emoji: EmojiTrash,
+			label: "Discard branch",
+			desc:  "Delete branch (commits saved in reflog for 30 days)",
 		},
 	}
 
@@ -139,12 +135,12 @@ func (m EndModel) View() string {
 			style = style.Foreground(ColorPrimary).Bold(true)
 		}
 
-		line := fmt.Sprintf("%s%s %s", cursor, opt.emoji, opt.label)
+		line := fmt.Sprintf("%s%s", cursor, opt.label)
 		b.WriteString(style.Render(line))
 		b.WriteString("\n")
 
 		if i == m.selected {
-			desc := MutedStyle.Render(fmt.Sprintf("   %s", opt.desc))
+			desc := MutedStyle.Render(fmt.Sprintf("  %s", opt.desc))
 			b.WriteString(desc)
 			b.WriteString("\n")
 		}
@@ -194,11 +190,11 @@ func (m EndModel) renderConfirmation() string {
 
 	switch m.choice {
 	case actionMerge:
-		message = SuccessStyle.Render(fmt.Sprintf("%s Merging to main...", EmojiSuccess))
+		message = "Merging to main..."
 	case actionContinue:
-		message = InfoStyle.Render(fmt.Sprintf("%s Session saved for later", EmojiPin))
+		message = "Session paused"
 	case actionAbandon:
-		message = WarningStyle.Render(fmt.Sprintf("%s Abandoning branch...", EmojiTrash))
+		message = "Discarding branch..."
 	}
 
 	return BaseStyle.Render(message)
@@ -207,28 +203,31 @@ func (m EndModel) renderConfirmation() string {
 func (m EndModel) HandleAction() error {
 	switch m.choice {
 	case actionMerge:
-		// Merge to main
+		// Merge to main and delete session
 		if err := git.MergeToMain(m.session.Task); err != nil {
 			return fmt.Errorf("failed to merge: %w", err)
 		}
-		if err := session.Clear(); err != nil {
-			return fmt.Errorf("failed to clear session: %w", err)
+		if err := m.session.Delete(); err != nil {
+			return fmt.Errorf("failed to delete session: %w", err)
 		}
-		fmt.Println(SuccessStyle.Render(fmt.Sprintf("\n%s Session complete! Branch merged to main.", EmojiSuccess)))
+		fmt.Println("\nSession complete. Branch merged to main.")
 
 	case actionContinue:
-		// Just exit, keep everything
-		fmt.Println(InfoStyle.Render(fmt.Sprintf("\n%s Session saved. Run 'focus status' to resume.", EmojiPin)))
+		// Pause the session
+		if err := m.session.Pause(); err != nil {
+			return fmt.Errorf("failed to pause session: %w", err)
+		}
+		fmt.Println("\nSession paused. Run 'focus resume' to continue later.")
 
 	case actionAbandon:
-		// Delete branch and clear session
+		// Delete branch and session
 		if err := git.DeleteBranch(); err != nil {
 			return fmt.Errorf("failed to delete branch: %w", err)
 		}
-		if err := session.Clear(); err != nil {
-			return fmt.Errorf("failed to clear session: %w", err)
+		if err := m.session.Delete(); err != nil {
+			return fmt.Errorf("failed to delete session: %w", err)
 		}
-		fmt.Println(WarningStyle.Render(fmt.Sprintf("\n%s Branch abandoned. Back to main.", EmojiTrash)))
+		fmt.Println("\nBranch discarded. Commits saved in reflog.")
 	}
 
 	return nil
