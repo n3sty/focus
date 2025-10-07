@@ -28,6 +28,11 @@ type EndModel struct {
 	confirmed  bool
 }
 
+// GetChoice returns the user's choice (0=merge, 1=continue, 2=abandon)
+func (m EndModel) GetChoice() int {
+	return int(m.choice)
+}
+
 func NewEndModel(sess *session.Session) EndModel {
 	commits, _ := git.GetCommitsSince(sess.StartTime)
 	elapsed := time.Since(sess.StartTime)

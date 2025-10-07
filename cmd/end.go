@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/n3sty/focus/internal/daemon"
 	"github.com/n3sty/focus/internal/session"
 	"github.com/n3sty/focus/internal/tui"
 	"github.com/spf13/cobra"
@@ -44,7 +45,22 @@ func runEnd(cmd *cobra.Command, args []string) error {
 
 	// Handle the user's choice
 	if m, ok := finalModel.(tui.EndModel); ok {
-		return m.HandleAction()
+		if err := m.HandleAction(); err != nil {
+			return err
+		}
+	}
+
+	// Stop watcher when session ends (for merge and abandon, not continue)
+	if m, ok := finalModel.(tui.EndModel); ok {
+		if m.GetChoice() != 1 { // 1 = continue
+			if daemon.IsRunning() {
+				if err := daemon.Stop(); err != nil {
+					fmt.Printf("⚠️  Warning: Could not stop watcher: %v\n", err)
+				} else {
+					fmt.Println("✓ Background watcher stopped")
+				}
+			}
+		}
 	}
 
 	return nil

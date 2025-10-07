@@ -2,8 +2,10 @@ package cmd
 
 import (
 	"fmt"
+	"os/exec"
 	"time"
 
+	"github.com/n3sty/focus/internal/daemon"
 	"github.com/n3sty/focus/internal/git"
 	"github.com/n3sty/focus/internal/session"
 	"github.com/spf13/cobra"
@@ -69,6 +71,19 @@ func runStart(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("failed to save session: %w", err)
 	}
 
+	// Start background watcher if not already running
+	if daemon.IsRunning() {
+		fmt.Println("✓ Watcher already running")
+	} else {
+		cmd := exec.Command("focus", "watch")
+		if err := cmd.Start(); err != nil {
+			// Non-fatal - session is still valid even if watcher fails
+			fmt.Printf("⚠️  Warning: Could not start watcher: %v\n", err)
+		} else {
+			fmt.Println("✓ Background watcher started")
+		}
+	}
+
 	fmt.Println("✓ Session saved")
 	fmt.Println("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
 	fmt.Printf("🎯 Focus Session Active\n")
@@ -78,7 +93,7 @@ func runStart(cmd *cobra.Command, args []string) error {
 	fmt.Println("\nUse these commands during your session:")
 	fmt.Println("  focus check  - Check if you're still on track")
 	fmt.Println("  focus status - See session progress")
-	fmt.Println("  focus end    - End the session\n")
+	fmt.Println("  focus end    - End the session")
 
 	return nil
 }

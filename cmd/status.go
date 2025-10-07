@@ -65,7 +65,7 @@ func runStatus(cmd *cobra.Command, args []string) error {
 
 	fmt.Println("\nCommands:")
 	fmt.Println("  focus check - Verify you're still on track")
-	fmt.Println("  focus end   - Complete or abandon this session\n")
+	fmt.Println("  focus end   - Complete or abandon this session")
 
 	return nil
 }

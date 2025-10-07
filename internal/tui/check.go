@@ -21,16 +21,16 @@ const (
 )
 
 type CheckModel struct {
-	session   *session.Session
-	state     checkState
-	textarea  textarea.Model
-	viewport  viewport.Model
-	Updated   bool
+	session      *session.Session
+	state        checkState
+	textarea     textarea.Model
+	viewport     viewport.Model
+	Updated      bool
 	stillOnTrack bool
-	driftDesc string
-	driftReason string
-	width     int
-	height    int
+	driftDesc    string
+	driftReason  string
+	width        int
+	height       int
 }
 
 func NewCheckModel(sess *session.Session) CheckModel {
@@ -136,10 +136,10 @@ func (m CheckModel) handleEnter() (tea.Model, tea.Cmd) {
 func (m CheckModel) View() string {
 	var b strings.Builder
 
-	// Header
-	header := TitleStyle.Render("🎯 Focus Check")
-	b.WriteString(header)
-	b.WriteString("\n\n")
+	// // Header
+	// header := TitleStyle.Render("🎯 Focus Check")
+	// b.WriteString(header)
+	// b.WriteString("\n\n")
 
 	// Current goal box
 	goalBox := BoxStyle.Render(fmt.Sprintf("%s Current Goal\n\n%s", EmojiGoal, m.session.Task))
@@ -221,7 +221,7 @@ func (m CheckModel) renderDriftReason() string {
 
 func (m CheckModel) renderComplete() string {
 	if m.stillOnTrack {
-		return SuccessStyle.Render(fmt.Sprintf("%s Great! Keep going.", EmojiSuccess))
+		return SuccessStyle.Render(fmt.Sprintf("%s Great! Keep going.", EmojiSuccess), "\n\n")
 	}
 
 	var b strings.Builder
