@@ -1,6 +1,6 @@
 package main
 
-import "github.com/jobsiemerink/focus/cmd"
+import "github.com/n3sty/focus/cmd"
 
 func main() {
 	cmd.Execute()

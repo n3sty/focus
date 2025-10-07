@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/jobsiemerink/focus/internal/git"
-	"github.com/jobsiemerink/focus/internal/session"
+	"github.com/n3sty/focus/internal/git"
+	"github.com/n3sty/focus/internal/session"
 	"github.com/spf13/cobra"
 )
 

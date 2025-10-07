@@ -1,4 +1,4 @@
-module github.com/jobsiemerink/focus
+module github.com/n3sty/focus
 
 go 1.25.1
 

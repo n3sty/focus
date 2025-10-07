@@ -6,7 +6,7 @@ Get started with Focus in 2 minutes!
 
 ```bash
 # If you haven't already
-go install github.com/jobsiemerink/focus@latest
+go install github.com/n3sty/focus@latest
 
 # Make sure ~/go/bin is in your PATH
 export PATH="$HOME/go/bin:$PATH"

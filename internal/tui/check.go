@@ -8,7 +8,7 @@ import (
 	"github.com/charmbracelet/bubbles/viewport"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-	"github.com/jobsiemerink/focus/internal/session"
+	"github.com/n3sty/focus/internal/session"
 )
 
 type checkState int

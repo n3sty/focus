@@ -2,7 +2,7 @@
 
 > A CLI tool to help developers stay focused and avoid scope creep
 
-**Built in public by [Job Siemerink](https://github.com/jobsiemerink)**
+**Built in public by [Job Siemerink](https://github.com/n3sty)**
 
 ## The Problem
 
@@ -64,12 +64,12 @@ Interactive TUI lets you:
 
 ### Quick Install
 ```bash
-go install github.com/jobsiemerink/focus@latest
+go install github.com/n3sty/focus@latest
 ```
 
 ### Manual Build
 ```bash
-git clone https://github.com/jobsiemerink/focus.git
+git clone https://github.com/n3sty/focus.git
 cd focus
 go build -o focus .
 go install
@@ -169,8 +169,8 @@ MIT License - see LICENSE file for details
 
 ## Author
 
-Built by [Job Siemerink](https://github.com/jobsiemerink) - Student, developer, and entrepreneur learning to ship instead of polish.
+Built by [Job Siemerink](https://github.com/n3sty) - Student, developer, and entrepreneur learning to ship instead of polish.
 
 ---
 
-**Built in public 🚀** | Follow the journey at [@jobsiemerink](https://twitter.com/jobsiemerink)
+**Built in public 🚀** | Follow the journey at [@n3sty](https://twitter.com/n3sty)

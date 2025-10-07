@@ -4,8 +4,8 @@ import (
 	"fmt"
 
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/jobsiemerink/focus/internal/session"
-	"github.com/jobsiemerink/focus/internal/tui"
+	"github.com/n3sty/focus/internal/session"
+	"github.com/n3sty/focus/internal/tui"
 	"github.com/spf13/cobra"
 )
 

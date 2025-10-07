@@ -7,8 +7,8 @@ import (
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-	"github.com/jobsiemerink/focus/internal/git"
-	"github.com/jobsiemerink/focus/internal/session"
+	"github.com/n3sty/focus/internal/git"
+	"github.com/n3sty/focus/internal/session"
 )
 
 type endAction int
